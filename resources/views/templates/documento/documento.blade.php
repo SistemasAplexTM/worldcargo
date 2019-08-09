@@ -180,9 +180,9 @@
                                                 <div class="input-group"  style="margin-bottom: 5px;" :class="{ 'has-error': errors.has('nombreR') }">
                                                     <input type="search" data-id="nomBuscarShipper" id="nombreR" name="nombreR" placeholder="@lang('documents.type_to_search')" class="form-control" onkeyup="deleteError($(this).parent());" v-model="nombreR" v-validate="'required'">
                                                     <span class="input-group-btn">
-                                                        <button id="btnBuscarShipper" @click="modalShipper(true)" class="btn btn-primary" type="button" data-toggle='tooltip' title="Buscar Shipper"><span class="fa fa-search"></span> @lang('documents.search')</button>
-                                                        <button id="btnEditShipper" @click="editFormsShipperConsignee(0)" class="btn btn-success" type="button" data-toggle='tooltip' title="Editar Shipper"><span class="fa fa-edit"></span>&nbsp;</button>
-                                                        <button id="btnResetShipper" @click="resetFormsShipperConsignee(0)" class="btn btn-default" type="button" data-toggle='tooltip' title="Reset Shipper"><span class="fa fa-refresh"></span>&nbsp;</button>
+                                                        <button id="btnBuscarShipper" @click="modalShipper(true)" class="btn btn-primary" type="button" data-toggle='tooltip' title="Buscar"><i class="fa fa-search"></i> @lang('documents.search')</button>
+                                                        <button id="btnEditShipper" @click="editFormsShipperConsignee(0)" class="btn btn-success" type="button" data-toggle='tooltip' title="Editar"><i class="fa fa-edit"></i>&nbsp;</button>
+                                                        <button id="btnResetShipper" @click="resetFormsShipperConsignee(0)" class="btn btn-default" type="button" data-toggle='tooltip' title="Reset"><i class="fa fa-sync"></i>&nbsp;</button>
                                                     </span>
                                                 </div>
                                                 <small class="help-block has-error">@{{ errors.first('nombreR') }}</small>
@@ -271,9 +271,9 @@
                                                 <div class="input-group" style="margin-bottom: 5px;" :class="{ 'has-error': errors.has('nombreD') }">
                                                     <input type="search" data-id="nomBuscarConsignee" class="form-control" id="nombreD" name="nombreD" placeholder="@lang('documents.type_to_search')" onkeyup="deleteError($(this).parent());" v-model="nombreD" v-validate="'required'">
                                                     <span class="input-group-btn">
-                                                        <button class="btn btn-primary" @click="modalConsignee(true)" id="btnBuscarConsignee" type="button" data-toggle='tooltip' title="Buscar consignee"><span class="fa fa-search"></span>@lang('documents.search')</button>
-                                                        <button id="btnEditConsignee" @click="editFormsShipperConsignee(1)" class="btn btn-success" type="button" data-toggle='tooltip' title="Editar consignee"><span class="fa fa-edit"></span>&nbsp;</button>
-                                                        <button id="btnResetConsignee" @click="resetFormsShipperConsignee(1)" class="btn btn-default" type="button" data-toggle='tooltip' title="Reset consignee"><span class="fa fa-refresh"></span>&nbsp;</button>
+                                                        <button class="btn btn-primary" @click="modalConsignee(true)" id="btnBuscarConsignee" type="button" data-toggle='tooltip' title="Buscar"><i class="fa fa-search"></i>@lang('documents.search')</button>
+                                                        <button id="btnEditConsignee" @click="editFormsShipperConsignee(1)" class="btn btn-success" type="button" data-toggle='tooltip' title="Editar"><i class="fa fa-edit"></i>&nbsp;</button>
+                                                        <button id="btnResetConsignee" @click="resetFormsShipperConsignee(1)" class="btn btn-default" type="button" data-toggle='tooltip' title="Reset"><i class="fa fa-refresh"></i>&nbsp;</button>
                                                         </span>
                                                 </div><!-- /input-group -->
                                                 <small class="help-block has-error">@{{ errors.first('nombreD') }}</small>

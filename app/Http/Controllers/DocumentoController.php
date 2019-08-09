@@ -634,7 +634,7 @@ class DocumentoController extends Controller
                 ->leftJoin('consignee', 'documento.consignee_id', '=', 'consignee.id')
                 ->join('agencia', 'documento.agencia_id', '=', 'agencia.id')
                 ->leftJoin('transportador as central_destino', 'documento.central_destino_id', '=', 'central_destino.id')
-                ->select('documento.id as id', 'documento.transporte_id', 'valor_libra', 'documento.liquidado', 'documento.tipo_documento_id as tipo_documento_id', 'documento.' . $codigo . ' as codigo',
+                ->select('documento.id as id', 'documento.transporte_id', 'central_destino.nombre as central_destino', 'valor_libra', 'documento.liquidado', 'documento.tipo_documento_id as tipo_documento_id', 'documento.' . $codigo . ' as codigo',
                 'documento.created_at as fecha', 'shipper.nombre_full as ship_nomfull', 'consignee.nombre_full as cons_nomfull', 'consignee.correo as email_cons',
                 'agencia.descripcion as agencia', $codigo,
                     DB::raw("(SELECT IFNULL(COUNT(consolidado_detalle.id),0) FROM consolidado_detalle WHERE consolidado_detalle.deleted_at IS NULL AND consolidado_detalle.consolidado_id = documento.id) as cantidad"),
