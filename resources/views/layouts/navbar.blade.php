@@ -89,7 +89,7 @@
                 <a href="{{ route('change_lang', ['lang' => 'en']) }}">EN</a>
             </li>
             <!--NOTIFICACIONES-->
-            <li class="dropdown">
+            {{-- <li class="dropdown">
                 <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                     <i class="fa fa-bell" data-toggle='tooltip' data-placement='left' title='Prealertas'></i>  
                 </a>
@@ -120,16 +120,11 @@
                         </div>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             <li>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <i class="fa fa-sign-out-alt"></i> @lang('layouts.log_out')
                 </a>
-                <li>
-                    <a class="right-sidebar-toggle" id="sidebar-rigth">
-                        <i class="fa fa-tasks"></i>
-                    </a>
-                </li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
                 </form>
