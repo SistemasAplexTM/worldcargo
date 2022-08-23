@@ -298,7 +298,7 @@ class ConsigneeController extends Controller
                 ['agencia_id', $request->agencia_id]
             ])->first();
 
-            if (count($dataUser) > 0) {
+            if ($dataUser and count($dataUser) > 0) {
                 $answer = array(
                     "valid"   => false,
                     "message" => "Este email ya existe en la base de datos",
@@ -396,6 +396,7 @@ class ConsigneeController extends Controller
                     'a.descripcion as descripcion',
                     'a.telefono',
                     'a.email',
+                    'a.email_host',
                     'a.direccion',
                     'a.zip',
                     'b.nombre AS ciudad',
@@ -412,7 +413,7 @@ class ConsigneeController extends Controller
             $asunto_correo = preg_replace(array_keys($replacements), array_values($replacements), $plantilla->subject);
 
             $from_self = array(
-                'address' => $agencia->email,
+                'address' => $agencia->email_host,
                 'name'    => $agencia->descripcion,
             );
             Mail::to($correo)->send(new \App\Mail\CasilleroEmail($cuerpo_correo, $from_self, $asunto_correo));

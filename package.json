@@ -18,7 +18,7 @@
     "lodash": "^4.17.4",
     "vue": "^2.5.17",
     "vue-side-nav": "^2.0.0",
-    "vue-touch": "git://github.com/vuejs/vue-touch.git#next"
+    "vue-touch": "^1.1.0"
   },
   "dependencies": {
     "ajv": "^6.5.3",
@@ -29,6 +29,6 @@
     "vue-form-generator": "^2.2.2",
     "vue-form-wizard": "^0.8.4",
     "vue-select": "^2.5.0",
-    "vue-spinkit": "^1.4.1"
+    "vue-spinkit": "^2.0.0"
   }
 }

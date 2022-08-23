@@ -305,7 +305,7 @@ class ShipperController extends Controller
                 ['correo', $request->email],
                 ['agencia_id', $request->agencia_id]
             ])->first();
-            if (count($dataUser) > 0) {
+            if ($dataUser and count($dataUser) > 0) {
                 $answer = array(
                     "valid"   => false,
                     "message" => "Este email ya existe en la base de datos",

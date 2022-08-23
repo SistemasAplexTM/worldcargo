@@ -46,7 +46,7 @@
 @endsection
 
 @section('content')
-    <div class="row" id="documentoIndex" data-id_print="{{Session('print_document')['id']}}" data-doc_print="{{Session('print_document')['document']}}">
+    <div class="row" id="documentoIndex" data-id_print="{{(Session('print_document')) ? Session('print_document')['id'] : ''}}" data-doc_print="{{(Session('print_document')) ? Session('print_document')['document'] : ''}}">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">

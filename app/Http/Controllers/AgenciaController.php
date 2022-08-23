@@ -144,15 +144,17 @@ class AgenciaController extends Controller
 
         /* REGISTRAR EL DETALLE */
         $agencia_id = $data->id;
-
-        for ($i = 0; $i < count($request->input('servicios_id')); $i++) {
-            $detalle                   = new AgenciaDetalle;
-            $detalle->agencia_id       = $agencia_id;
-            $detalle->servicios_id     = $request->input('servicios_id')[$i];
-            $detalle->tarifa_principal = $request->input('tarifa_principal')[$i];
-            $detalle->tarifa_agencia   = $request->input('tarifa_agencia')[$i];
-            $detalle->seguro           = $request->input('seguro')[$i];
-            $detalle->save();
+        // return $request->all();
+        if($request->input('servicios_id')){
+            for ($i = 0; $i < count($request->input('servicios_id')); $i++) {
+                $detalle                   = new AgenciaDetalle;
+                $detalle->agencia_id       = $agencia_id;
+                $detalle->servicios_id     = $request->input('servicios_id')[$i];
+                $detalle->tarifa_principal = $request->input('tarifa_principal')[$i];
+                $detalle->tarifa_agencia   = $request->input('tarifa_agencia')[$i];
+                $detalle->seguro           = $request->input('seguro')[$i];
+                $detalle->save();
+            }
         }
 
         return redirect()->route('agencia.index');

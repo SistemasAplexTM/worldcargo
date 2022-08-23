@@ -168,7 +168,7 @@ class PrealertaController extends Controller
                         $asunto_correo = preg_replace(array_keys($replacements), array_values($replacements), $plantilla->subject);
 
                         $from_self = array(
-                            'address' => $objAgencia->email,
+                            'address' => $objAgencia->email_host,
                             'name'    => $objAgencia->descripcion,
                         );
 

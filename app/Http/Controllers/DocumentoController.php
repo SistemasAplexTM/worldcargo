@@ -265,7 +265,7 @@ class DocumentoController extends Controller
             'tipoPagos',
             'formaPagos',
             'grupos',
-            'func'
+            'funcionalidades'
         ));
     }
 
@@ -369,6 +369,7 @@ class DocumentoController extends Controller
                     $data->peso         = $request->pesoDim;
                     $data->peso_cobrado = $request->pesoDim;
                 } else {
+                   
                     if ($request->document_type === 'guia') {
                         if (!$request->liquidar) {
                             $data->liquidado       = 0;
@@ -392,7 +393,7 @@ class DocumentoController extends Controller
                             $data->peso            = $request->peso_total;
                             $data->peso_cobrado    = $request->peso_cobrado;
                             $data->valor           = ($request->valor_libra != '') ? $request->valor_libra : 0;
-                            $data->valor_libra     = ($request->valor_libra2 != '') ? $request->valor_libra2 : 0;
+                            $data->valor_libra     = ($request->valor_libra != '') ? $request->valor_libra : 0;
                             $data->impuesto        = $request->impuesto;
                             $data->flete           = $request->flete;
                             $data->seguro          = $request->seguro_valor;
@@ -1560,6 +1561,7 @@ class DocumentoController extends Controller
             ->leftJoin('deptos as deptos_consignee', 'ciudad_consignee.deptos_id', 'deptos_consignee.id')
             ->leftJoin('deptos as deptos_shipper', 'ciudad_shipper.deptos_id', 'deptos_shipper.id')
             ->leftJoin('guia_wrh_pivot', 'guia_wrh_pivot.documento_id', 'documento.id')
+            ->leftJoin('maestra_multiple AS mm', 'guia_wrh_pivot.tipo_embarque_id', 'mm.id')
             ->join('agencia', 'documento.agencia_id', 'agencia.id')
             ->leftJoin('localizacion AS ciudad_agencia', 'agencia.localizacion_id', '=', 'ciudad_agencia.id')
             ->leftJoin('deptos AS deptos_agencia', 'ciudad_agencia.deptos_id', '=', 'deptos_agencia.id')
@@ -1591,7 +1593,8 @@ class DocumentoController extends Controller
                 'ciudad_agencia.nombre AS agencia_ciudad',
                 'ciudad_agencia.prefijo AS agencia_ciudad_prefijo',
                 'deptos_agencia.descripcion AS agencia_depto',
-                'deptos_agencia.abreviatura AS agencia_depto_prefijo'
+                'deptos_agencia.abreviatura AS agencia_depto_prefijo',
+                'mm.nombre AS transporte'
             )
             ->where([
                 ['documento.deleted_at', null],
@@ -1757,7 +1760,7 @@ class DocumentoController extends Controller
             ])
             ->whereRaw('(documento_detalle.num_warehouse = "' . $num_guia . '" or documento_detalle.num_guia = "' . $num_guia . '")')
             ->first();
-        if (count($detalle) > 0) {
+        if ($detalle) {
             /* VERIFICAR QUE EL NUMERO INGRESADO NO ESTE EN OTRO CONSOLIDADO O YA ESTE INGRESADO */
             $cons_detail = DB::table('consolidado_detalle as a')
                 ->join('documento as b', 'a.consolidado_id', 'b.id')
@@ -1765,7 +1768,7 @@ class DocumentoController extends Controller
                 ->where([['a.deleted_at', null], ['a.documento_detalle_id', $detalle->id]])
                 ->first();
 
-            if (count($cons_detail) == 0) {
+            if (!$cons_detail) {
                 /* VERIFICAR SI LA GUIA O WAREHOUSE INGRESADO PERTENECE AL PAIS DEL CONSOLIDADO */
                 $cons = DB::table('consignee as a')
                     ->join('localizacion as b', 'a.localizacion_id', 'b.id')
@@ -1822,6 +1825,7 @@ class DocumentoController extends Controller
         } else {
             $answer = array(
                 "code" => 600,
+                "datos" => $detalle,
                 "data" => 'No existen registros con el número de Guía/WRH ingresado.',
             );
         }
@@ -2187,7 +2191,7 @@ class DocumentoController extends Controller
                 $asunto_correo = preg_replace(array_keys($replacements), array_values($replacements), $plantilla->subject);
 
                 $from_self = array(
-                    'address' => $objAgencia->email,
+                    'address' => $objAgencia->email_host,
                     'name'    => $objAgencia->descripcion,
                 );
 
@@ -2484,12 +2488,15 @@ class DocumentoController extends Controller
 
             if (isset($request->value) and $request->name === 'peso') {
                 $data->peso = $request->value;
+                $data->peso2 = $request->value;
             }
             if (isset($request->value) and $request->name === 'contenido') {
                 $data->contenido = $request->value;
+                $data->contenido2 = $request->value;
             }
             if (isset($request->value) and $request->name === 'declarado') {
                 $data->valor = $request->value;
+                $data->declarado2 = $request->value;
             }
             if (isset($request->value) and $request->name === 'piezas') {
                 $data->piezas = $request->value;
@@ -2624,7 +2631,7 @@ class DocumentoController extends Controller
             return $answer;
         }
     }
-
+    
     public function getDataByDocument($id)
     {
       $trackings = DB::table('documento_detalle as a')

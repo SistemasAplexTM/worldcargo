@@ -101,7 +101,7 @@
                     $total_piezas += $val->piezas;
                     $total_declarado += $val->valor;
                     $total_libras += $val->peso;
-                    $total_volumen += ($val->volumen);
+                    $total_volumen += ceil($val->volumen);
                     $pa_id = $val->posicion_arancelaria_id;
                     //cft = lxhxw / 1728 (pie cubico)
                     //cmt = cft/35.315 (metro cubico)
@@ -235,7 +235,7 @@
                   <td class="detalle">{{ $val->piezas }}</td>
                   <td class="detalle">{{ $val->largo . 'x'.$val->ancho. 'x'. $val->alto }}</td>
                   <td style="text-align: left;" class="detalle">{{ strtoupper(str_replace(',', ' ',$val->contenido)) }} </td>
-                  <td class="detalle">{{ $val->peso }} / {{ number_format(ceil($val->peso / 2.205),0) }}</td>
+                  <td class="detalle">{{ $val->peso2 }} / {{ number_format(ceil($val->peso2 / 2.205),0) }}</td>
                   {{-- <td>{{ ceil(number_format($val->peso2 / 2.205)) }}</td> --}}
                   <td class="detalle">{{ ceil($val->volumen) }} / {{ number_format(ceil($val->volumen / 2.204622),0) }}</td>
                   {{-- <td>{{ ceil(number_format($val->volumen / 2.204622)) }}</td> --}}
@@ -260,7 +260,7 @@
                   <td>{{ $val->ancho }}</td>
                   <td>{{ $val->alto }}</td>
                   <td>{{ $val->piezas }}</td>
-                  <td>{{ $val->peso }}</td>
+                  <td>{{ $val->peso2 }}</td>
                   <td style="text-align:left;">{{ $val->contenido }}</td>
                 </tr>
               @endforeach
@@ -280,20 +280,19 @@
                             <table width="100%" border="0" cellspacing="1" cellpadding="0">
                                 <tr>
                                     <?php
-                                         $sub = $documento->flete;
-                                      //if($documento->tipo_embarque_id == '8'){
-                                        //if($pa_id == '1'){
-                                          //$sub = $pie * $documento->valor_libra;
-                                        //}else{
-                                        //  $sub = $metro * $documento->valor_libra;
-                                        //}
-                                      //}else{
-                                        //if($total_libras > $total_volumen){
-                                          //$sub = ($documento->flete);
-                                        //}else{
-                                          //$sub = ($documento->flete);
-                                        //}
-                                      //}
+                                      if($documento->tipo_embarque_id == '8'){
+                                        if($pa_id == '1'){
+                                          $sub = $pie * $documento->valor_libra;
+                                        }else{
+                                          $sub = $metro * $documento->valor_libra;
+                                        }
+                                      }else{
+                                        if($total_libras > $total_volumen){
+                                          $sub = ($documento->flete);
+                                        }else{
+                                          $sub = ($documento->flete);
+                                        }
+                                      }
                                     ?>
                                     <td><b>@lang('general.freight'):</b></td>
                                     <td align="right">$ {{ $subtotal = number_format(ceil($sub), 2) }} </td>

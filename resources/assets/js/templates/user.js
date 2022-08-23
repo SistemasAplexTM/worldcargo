@@ -76,7 +76,7 @@ var objVue = new Vue({
                 },
                 password_confirm: {
                     required: 'La confirmación de la contraseña es obligatoria.',
-                    confirmed: 'La confirmación de la contraseña no coincide.'
+                    confirmed: 'Las contraseñas no coinciden.'
                 },
                 rol_id: {
                     required: 'El rol es obligatorio.'
@@ -230,6 +230,7 @@ var objVue = new Vue({
                 }
             });*/
             this.$validator.validateAll().then((result) => {
+                console.log('asdf',result);
                 if (result) {
                     var activo = 0;
                     if (this.actived) {

@@ -176,7 +176,7 @@ var objVue = new Vue({
                         if(response.data['code'] == 200){
                             toastr.success('Registro creado correctamente.');
                             toastr.options.closeButton = true;
-                            window.location = response.data['url'];
+                            // window.location = response.data['url'];
                         }else{
                             toastr.warning(response.data['error']);
                             toastr.options.closeButton = true;

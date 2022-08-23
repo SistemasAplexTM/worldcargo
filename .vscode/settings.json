@@ -1,0 +1,8 @@
+{
+    "i18n-ally.localesPaths": [
+        "resources/lang",
+        "resources/assets/js/plugins/formatCurrency/i18n",
+        "resources/assets/js/plugins/select2/js/i18n"
+    ],
+    "i18n-ally.keystyle": "nested"
+}

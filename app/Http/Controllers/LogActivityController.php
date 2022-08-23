@@ -13,6 +13,7 @@ class LogActivityController extends Controller
      */
     public function index()
     {
+        $logs = [];
         return view('logActivity', compact('logs'));
     }
 

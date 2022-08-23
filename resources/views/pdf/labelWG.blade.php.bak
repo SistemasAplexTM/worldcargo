@@ -224,7 +224,6 @@
                 <div class="codebar1">
                     <div class="paginacion">{{ $cont + 1 . '-' . count($detalle) }}</div>
                     <div class="fecha">{{ $value->created_at->toFormattedDateString() }}</div>
-                    <div class="transporte">{{ $documento->transporte }}</div>
                 </div>
                 <div class="datos">
                     <div class="pkgs">Pkgs: 1 </div>
