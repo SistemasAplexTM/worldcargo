@@ -21,6 +21,10 @@ class ConsultaController extends Controller
         	$where = null;
         	$having = null;
 
+            if(!Auth::user()->isRole('admin')){
+                $where .= " AND b.agencia_id = " . Auth::user()->agencia_id;
+            }
+            
         	if($request->all()['fechas'] != null){
         		$fechasArray = explode('-', $request->all()['fechas']);
                 $fIni = date("Y-m-d", strtotime(trim($fechasArray[0])));
@@ -40,6 +44,7 @@ class ConsultaController extends Controller
         		$having = " HAVING (SELECT x.id FROM status_detalle AS z INNER JOIN status AS x ON z.status_id = x.id WHERE z.deleted_at IS NULL AND z.documento_detalle_id = a.id ORDER BY z.id DESC LIMIT 1) = ". $request->all()['status_id'];
         		$flag = true;
         	}
+            
         	if ($flag) {
         		$sql = DB::select(DB::raw("SELECT DATE_FORMAT(b.created_at,'%Y-%m-%d') AS fecha, a.num_warehouse, c.nombre_full AS shipper, d.nombre_full AS consignee, a.piezas, a.peso, a.volumen, (SELECT x.descripcion FROM status_detalle AS z INNER JOIN status AS x ON z.status_id = x.id WHERE z.deleted_at IS NULL AND z.documento_detalle_id = a.id ORDER BY z.id DESC LIMIT 1) AS estado FROM documento_detalle AS a INNER JOIN documento AS b ON a.documento_id = b.id INNER JOIN shipper AS c ON b.shipper_id = c.id INNER JOIN consignee AS d ON b.consignee_id = d.id WHERE a.deleted_at IS NULL $where $having" ));
                 return \DataTables::of($sql)->make(true);

@@ -55,7 +55,7 @@ var objVue = new Vue({
                 processing: true,
                 serverSide: true,
                 searching: true,
-                dom: "<'row'<'col-sm-6'l><'col-sm-5 text-right'f><'col-sm-1 text-right'B><'floatright'>rtip>",
+                dom: "<'row'<'col-sm-7'l><'col-sm-3 text-right'f><'col-sm-2 text-right'B><'floatright'>rtip>",
                 "buttons": [
                     {
                         extend: 'excel',

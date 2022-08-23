@@ -72,6 +72,6 @@ mix.copyDirectory('resources/assets/js/templates', 'public/js/templates');
  // mix.copyDirectory('resources/assets/css/font-awesome', 'public/css/font-awesome');
  // mix.copyDirectory('resources/assets/css/hoverEfects', 'public/css/hoverEfects');
  // mix.copyDirectory('resources/assets/css/patterns', 'public/css/patterns');
- // mix.copyDirectory('resources/assets/json', 'public/json');
+//  mix.copyDirectory('resources/assets/json', 'public/json');
  // mix.copyDirectory('resources/assets/css/plugins/iCheck/green.png', 'public/css');
  // mix.copyDirectory('resources/assets/css/plugins/iCheck/green@2x.png', 'public/css');
