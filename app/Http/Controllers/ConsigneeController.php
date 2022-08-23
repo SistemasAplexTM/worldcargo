@@ -445,11 +445,14 @@ class ConsigneeController extends Controller
     public function vueSelect($data)
     {
         $term = $data;
-
-        $tags = Consignee::select(['id', 'nombre_full as name'])->where([
+        $where = [
             ['nombre_full', 'like', '%' . $term . '%'],
             ['deleted_at', null]
-        ])->get();
+        ];
+        if(!Auth::user()->isRole('admin')){
+            $where[] = ['consignee.agencia_id', Auth::user()->agencia_id];
+        }
+        $tags = Consignee::select(['id', 'nombre_full as name'])->where($where)->get();
         $answer = array(
             'code'  => 200,
             'items' => $tags,

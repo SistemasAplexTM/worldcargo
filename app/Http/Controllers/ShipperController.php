@@ -181,7 +181,7 @@ class ShipperController extends Controller
                 $where[] = array($table . '.nombre_full', 'like', '%' . $data . '%');
             }
             if(!Auth::user()->isRole('admin')){
-                $where[] = [$table . '.agencia_id', $id_agencia];
+                $where[] = [$table . '.agencia_id', Auth::user()->agencia_id];
             }
             $sql = DB::table($table)
                 ->join('localizacion', $table . '.localizacion_id', '=', 'localizacion.id')
@@ -201,7 +201,7 @@ class ShipperController extends Controller
                 $where[] = array('a.consignee_id', $id_consignee);
             }
             if(!Auth::user()->isRole('admin')){
-                $where[] = ['agencia.id', $id_agencia];
+                $where[] = ['agencia.id', Auth::user()->agencia_id];
             }
 
             $sql = DB::table('shipper_consignee AS a')
@@ -327,11 +327,14 @@ class ShipperController extends Controller
     public function vueSelect($data)
     {
         $term = $data;
-
-        $tags = Shipper::select(['id', 'nombre_full as name'])->where([
+        $where = [
             ['nombre_full', 'like', '%' . $term . '%'],
             ['deleted_at', null]
-        ])->get();
+        ];
+        if(!Auth::user()->isRole('admin')){
+            $where[] = ['shipper.agencia_id', Auth::user()->agencia_id];
+        }
+        $tags = Shipper::select(['id', 'nombre_full as name'])->where($where)->get();
         $answer = array(
             'code'  => 200,
             'items' => $tags,
