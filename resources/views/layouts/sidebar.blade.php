@@ -65,7 +65,7 @@
                          @lang('layouts.load') 
                     </span>
                     <span class="arrow">
-                        <i class="fas fa-angle-down"></i>
+                        <i class="fa fa-angle-down"></i>
                     </span>
                 </a>
                 <ul class="nav nav-second-level">
@@ -116,7 +116,7 @@
                                 @lang('layouts.account')
                             </span>
                     <span class="arrow">
-                        <i class="fas fa-angle-down"></i>
+                        <i class="fa fa-angle-down"></i>
                     </span>
                 </a>
                 <ul class="nav nav-second-level">
@@ -172,7 +172,7 @@
                              @lang('layouts.lockens')    
                         </span>
                         <span class="arrow">
-                            <i class="fas fa-angle-down"></i>
+                            <i class="fa fa-angle-down"></i>
                         </span>
                     </a>
                     <ul class="nav nav-second-level">
@@ -196,7 +196,7 @@
                       @lang('layouts.maintenances')   
                     </span>
                     <span class="arrow">
-                        <i class="fas fa-angle-down"></i>
+                        <i class="fa fa-angle-down"></i>
                     </span>
                 </a>
                 <ul class="nav nav-second-level">
@@ -302,7 +302,7 @@
                              @lang('layouts.administration') 
                     </span>
                     <span class="arrow">
-                        <i class="fas fa-angle-down"></i>
+                        <i class="fa fa-angle-down"></i>
                     </span>
                 </a>
                 <ul class="nav nav-second-level collapse">
@@ -418,7 +418,7 @@
                      
                     </span>
                     <span class="arrow">
-                        <i class="fas fa-angle-down"></i>
+                        <i class="fa fa-angle-down"></i>
                     </span>
                 </a>
                 <ul class="nav nav-second-level collapse">
