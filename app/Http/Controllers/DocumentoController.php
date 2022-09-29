@@ -1257,7 +1257,7 @@ class DocumentoController extends Controller
                 'ciudad_consignee.nombre AS cons_ciudad',
                 'deptos_consignee.descripcion AS cons_depto',
                 DB::raw('(SELECT
-                group_concat(a.codigo) AS trackings
+                GROUP_CONCAT(a.codigo SEPARATOR ", ") AS trackings
                 FROM
                 tracking AS a
                 WHERE

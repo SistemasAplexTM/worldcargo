@@ -80,6 +80,7 @@
 
     </head>
     <?php
+    $showLeyend = false;
     $total_declarado = 0;
     $total_piezas = 0;
     $total_libras = 0;
@@ -234,7 +235,10 @@
                   </td class="detalle">
                   <td class="detalle">{{ $val->piezas }}</td>
                   <td class="detalle">{{ $val->largo . 'x'.$val->ancho. 'x'. $val->alto }}</td>
-                  <td style="text-align: left;" class="detalle">{{ strtoupper(str_replace(',', ' ',$val->contenido)) }} </td>
+                  <td style="text-align: left;" class="detalle">
+                    {{ strtoupper(str_replace(',', ' ',$val->contenido)) }} <br>
+                    <strong>Trackings:</strong> {{ $val->trackings }}
+                  </td>
                   <td class="detalle">{{ $val->peso }} / {{ number_format(ceil($val->peso / 2.205),0) }}</td>
                   {{-- <td>{{ ceil(number_format($val->peso2 / 2.205)) }}</td> --}}
                   <td class="detalle">{{ ceil($val->volumen) }} / {{ number_format(ceil($val->volumen / 2.204622),0) }}</td>
@@ -378,6 +382,7 @@
             @endif
           </table>
 
+          @if($showLeyend)
           <table class="acuerdo separador_interno">
              @if(env('APP_CLIENT') == 'worldcargo')
               <?php  $agencia = 'WORLD CARGO' ?>
@@ -406,6 +411,7 @@
               </td>
             </tr>
           </table>
+          @endif
 
         @endif
         <table class="table_firma separador_interno" style="{{ (env('APP_CLIENT') == 'worldcargo' || env('APP_CLIENT') == 'colombiana') ? 'padding-top:30px;' : '' }}">
