@@ -85,8 +85,9 @@
     $total_piezas = 0;
     $total_libras = 0;
     $total_volumen = 0;
+    $total_volumenKl = 0;
     $total_volumen_cft = 0;
-    $total_cmt = 0;
+    $total_volumen_cmb = 0;
     $pa_id = '';
     ?>
     <body>
@@ -102,10 +103,11 @@
                     $total_piezas += $val->piezas;
                     $total_declarado += $val->valor;
                     $total_libras += $val->peso;
-                    $total_volumen += ($val->volumen);
+                    $total_volumen += ceil($val->volumen);
+                    $total_volumenKl += (($val->volumen) ? ceil($val->volumen / 2.204622) : 0);
                     $pa_id = $val->posicion_arancelaria_id;
-                    //cft = lxhxw / 1728 (pie cubico)
-                    //cmt = cft/35.315 (metro cubico)
+                    $total_volumen_cft += ceil(number_format($val->volumen * 166 / 1728)); //cft = lxhxw / 1728 (pie cubico)
+                    $total_volumen_cmb += number_format(ceil(($val->volumen * 166 / 1728) / 35.315),0); //cmt = cft/35.315 (metro cubico)
                 ?>
             @endforeach
         @endif
@@ -200,15 +202,17 @@
             <th colspan="2" scope="col">Total Weight</th>
             <th colspan="2" scope="col">Total Weight - Volume</th>
             <th colspan="2" scope="col">Total Volume</th>
-            </tr>
+          </tr>
           <tr>
             <td style="width:15%;">{{ $total_piezas }} Pcs</td>
             <td style="width:15%;">{{ $total_libras }} Lb</td>
             <td style="width:15%;">{{ number_format(ceil($total_libras / 2.20462), 0) }} Kl</td>
+
             <td style="width:15%;">{{ number_format(ceil((isset($total_volumen) ? ceil($total_volumen) : 0)),0) }} Lb</td>
-            <td style="width:15%;">{{ number_format(ceil(((isset($total_volumen) ? ceil($total_volumen) : 0) / 2.204622)), 0) }} Kl</td>
-            <td style="width:15%;">{{ $pie = number_format(ceil(($total_volumen * 166 / 1728)), 0) }} cuft</td>
-            <td style="width:10%;">{{ $metro = number_format(ceil(($pie / 35.315)), 0) }} cbm</td>
+            <td style="width:15%;">{{ number_format($total_volumenKl) }} Kl</td>
+
+            <td style="width:15%;">{{ $pie = number_format($total_volumen_cft, 0) }} cuft</td>
+            <td style="width:10%;">{{ $metro = number_format($total_volumen_cmb, 0) }} cbm</td>
           </tr>
         </table>
         <table border="1" class="table_grid separador_interno">
