@@ -55,7 +55,7 @@
             </th>
             <th>&nbsp;</th>
             <th width="250px" style="text-align: right;">
-                <div id="nomAgencia" style="font-size: 20px;">{{ $documento->agencia }}</div>
+                <div id="nomAgencia" style="font-size: 20px;">{{ $documento->agencia  }}</div>
                 <div id="dirAgencia">{{ $documento->agencia_dir }} - {{ $documento->agencia_ciudad }} - {{ $documento->agencia_depto }}</div>
                 <div id="telAgencia">@lang('general.phone'): {{ $documento->agencia_tel }} Zip: {{ $documento->agencia_zip }}</div>
             </th>
@@ -141,21 +141,21 @@
                     <td id="detalle" style="text-align: center;">{{ number_format($piezas = 1) }}</td>
                     <td id="detalle" style="text-align: center;">
                         @if($val->peso2 == 0)
-                           <div style="background-color:black;color:white;">{{ ceil($val->peso2) }} Lb<div>
+                           <div style="background-color:black;color:white;">{{ ($val->peso2) }} Lb<div>
                         @else
                             {{ ceil($val->peso2) }} Lb
                         @endif
                     </td>
-                    <td id="detalle" style="text-align: center;width: 10%">{{ ceil(number_format($val->volumen * 166 / 1728)) }}</td>
-                    <td id="detalle" style="text-align: center;width: 10%">{{ ceil(number_format(($val->volumen * 166 / 1728) / 35.315)) }}</td>
+                    <td id="detalle" style="text-align: center;width: 10%">{{ (number_format($val->volumen * 166 / 1728,2)) }}</td>
+                    <td id="detalle" style="text-align: center;width: 10%">{{ (number_format(($val->volumen * 166 / 1728) / 35.315, 2)) }}</td>
                 </tr>
                 <tr><th colspan="7"><div style="font-size:1px;margin-top:6px;margin-bottom: 6px; background-color: #ccc">&nbsp;</div></th></tr>
                 <?php
                 $totPiezas += $piezas;
                 $peso += ceil($val->peso2);
                 $vol += ceil($val->volumen);
-                $cuft += ceil(number_format($val->volumen * 166 / 1728));
-                $cbm += ceil(number_format(($val->volumen * 166 / 1728) / 35.315));
+                $cuft += (number_format($val->volumen * 166 / 1728,2));
+                $cbm += (number_format(($val->volumen * 166 / 1728) / 35.315,2));
                 $cont++;
                 if($bolsas < $val->num_bolsa){
                     $bolsas = $val->num_bolsa;

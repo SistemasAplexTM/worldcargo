@@ -80,7 +80,6 @@
 
     </head>
     <?php
-    $showLeyend = false;
     $total_declarado = 0;
     $total_piezas = 0;
     $total_libras = 0;
@@ -96,24 +95,23 @@
         <?php //print_r($detalle); ?>
 
       {{-- </pre> --}}
-      
+      <?php //exit(); ?>
         @if(count($detalle) > 0)
             @foreach($detalle as $val)
                 <?php
                     $total_piezas += $val->piezas;
                     $total_declarado += $val->valor;
                     $total_libras += $val->peso;
-                    $total_volumen += ($val->volumen);
-                    $total_volumenKl += (($val->volumen) ? number_format($val->volumen / 2.204622, 2) : 0);
+                    $total_volumen += ceil($val->volumen);
+                    $total_volumenKl += (($val->volumen) ? ceil($val->volumen / 2.204622) : 0);
                     $pa_id = $val->posicion_arancelaria_id;
-                    ?>
+                ?>
             @endforeach
             @php
-            $total_volumen_cft = number_format(bcdiv($total_volumen * 166 / 1728, '1', 2), 2); //cft = lxhxw / 1728 (pie cubico)
-            $total_volumen_cmb = number_format(bcdiv(($total_volumen * 166 / 1728) / 35.315, '1', 2),2); //cmt = cft/35.315 (metro cubico)
-            @endphp
+            $total_volumen_cft = ceil(number_format($total_volumen * 166 / 1728)); //cft = lxhxw / 1728 (pie cubico)
+            $total_volumen_cmb = number_format(ceil(($total_volumen * 166 / 1728) / 35.315),0); //cmt = cft/35.315 (metro cubico)
+             @endphp
         @endif
-        <?php //exit(); ?>
         <table>
           <tr>
             <td colspan="2" rowspan="5" style="width:300px;height: 100px;">
@@ -205,17 +203,15 @@
             <th colspan="2" scope="col">Total Weight</th>
             <th colspan="2" scope="col">Total Weight - Volume</th>
             <th colspan="2" scope="col">Total Volume</th>
-          </tr>
+            </tr>
           <tr>
             <td style="width:15%;">{{ $total_piezas }} Pcs</td>
             <td style="width:15%;">{{ $total_libras }} Lb</td>
-            <td style="width:15%;">{{ number_format(($total_libras / 2.20462), 0) }} Kl</td>
-
-            <td style="width:15%;">{{ number_format(((isset($total_volumen) ? ($total_volumen) : 0)),2) }} Lb</td>
-            <td style="width:15%;">{{ number_format($total_volumenKl,2) }} Kl</td>
-
-            <td style="width:15%;">{{ $pie = number_format($total_volumen_cft, 2) }} cuft</td>
-            <td style="width:10%;">{{ $metro = number_format($total_volumen_cmb, 2) }} cbm</td>
+            <td style="width:15%;">{{ number_format(ceil($total_libras / 2.20462), 0) }} Kl</td>
+            <td style="width:15%;">{{ number_format(ceil((isset($total_volumen) ? ceil($total_volumen) : 0)),0) }} Lb</td>
+            <td style="width:15%;">{{ number_format($total_volumenKl) }} Kl</td>
+            <td style="width:15%;">{{ $pie = number_format($total_volumen_cft, 0) }} cuft</td>
+            <td style="width:10%;">{{ $metro = number_format($total_volumen_cmb, 0) }} cbm</td>
           </tr>
         </table>
         <table border="1" class="table_grid separador_interno">
@@ -228,7 +224,7 @@
                 <th class="col" >Content</th>
                 <th class="col" style="width: 10%">Weight<br>Lb / Kg</th>
                 {{-- <th class="col" style="width: 7%">Weight<br>Kg</th> --}}
-                <th class="col" style="width: 13%">Vol<br>Lb / Kg</th>
+                <th class="col" style="width: 10%">Vol<br>Lb / Kg</th>
                 {{-- <th class="col" style="width: 7%">Vol<br>Kg</th> --}}
                 {{-- <th class="col" style="width: 7%">Weight<br>Ft3</th> --}}
                 <th class="col" style="width: 10%">Vol<br>ft³ / mt³</th>
@@ -246,12 +242,12 @@
                     {{ strtoupper(str_replace(',', ' ',$val->contenido)) }} <br>
                     <strong>Trackings:</strong> {{ $val->trackings }}
                   </td>
-                  <td class="detalle">{{ $val->peso }} / {{ number_format(($val->peso / 2.205),2) }}</td>
+                  <td class="detalle">{{ $val->peso }} / {{ number_format(ceil($val->peso / 2.205),0) }}</td>
                   {{-- <td>{{ ceil(number_format($val->peso2 / 2.205)) }}</td> --}}
-                  <td class="detalle">{{ number_format($val->volumen,2) }} / {{ number_format(($val->volumen / 2.204622),2) }}</td>
+                  <td class="detalle">{{ ceil($val->volumen) }} / {{ number_format(ceil($val->volumen / 2.204622),0) }}</td>
                   {{-- <td>{{ ceil(number_format($val->volumen / 2.204622)) }}</td> --}}
                   {{-- <td>{{ ceil(number_format($val->volumen * 166 / 1728)) }}</td> --}}
-                  <td class="detalle">{{ (number_format($val->volumen * 166 / 1728,2)) }} / {{ number_format((($val->volumen * 166 / 1728) / 35.315),2) }}</td>
+                  <td class="detalle">{{ calculateFt($val->volumen) }} / {{ number_format(ceil(($val->volumen * 166 / 1728) / 35.315),0) }}</td>
                 </tr>
               @endforeach
             </tbody>
@@ -389,7 +385,6 @@
             @endif
           </table>
 
-          @if($showLeyend)
           <table class="acuerdo separador_interno">
              @if(env('APP_CLIENT') == 'worldcargo')
               <?php  $agencia = 'WORLD CARGO' ?>
@@ -418,7 +413,6 @@
               </td>
             </tr>
           </table>
-          @endif
 
         @endif
         <table class="table_firma separador_interno" style="{{ (env('APP_CLIENT') == 'worldcargo' || env('APP_CLIENT') == 'colombiana') ? 'padding-top:30px;' : '' }}">
@@ -441,3 +435,13 @@
         @endif
     </body>
 </html>
+
+
+@php
+    function calculateFt($vol){
+      $mod = fmod($vol * 166 / 1728, 1);
+      $roundVol = ($mod >= 0.5) ? number_format(ceil($vol * 166 / 1728),2) : round($vol * 166 / 1728,2);
+      return $roundVol;
+    }
+@endphp
+

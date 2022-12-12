@@ -80,12 +80,14 @@
 
     </head>
     <?php
+    $showLeyend = false;
     $total_declarado = 0;
     $total_piezas = 0;
     $total_libras = 0;
     $total_volumen = 0;
+    $total_volumenKl = 0;
     $total_volumen_cft = 0;
-    $total_cmt = 0;
+    $total_volumen_cmb = 0;
     $pa_id = '';
     ?>
     <body>
@@ -94,20 +96,24 @@
         <?php //print_r($detalle); ?>
 
       {{-- </pre> --}}
-      <?php //exit(); ?>
+      
         @if(count($detalle) > 0)
             @foreach($detalle as $val)
                 <?php
                     $total_piezas += $val->piezas;
                     $total_declarado += $val->valor;
                     $total_libras += $val->peso;
-                    $total_volumen += ceil($val->volumen);
+                    $total_volumen += ($val->volumen);
+                    $total_volumenKl += (($val->volumen) ? number_format($val->volumen / 2.204622, 2) : 0);
                     $pa_id = $val->posicion_arancelaria_id;
-                    //cft = lxhxw / 1728 (pie cubico)
-                    //cmt = cft/35.315 (metro cubico)
-                ?>
+                    ?>
             @endforeach
+            @php
+            $total_volumen_cft = number_format(bcdiv($total_volumen * 166 / 1728, '1', 2), 2); //cft = lxhxw / 1728 (pie cubico)
+            $total_volumen_cmb = number_format(bcdiv(($total_volumen * 166 / 1728) / 35.315, '1', 2),2); //cmt = cft/35.315 (metro cubico)
+            @endphp
         @endif
+        <?php //exit(); ?>
         <table>
           <tr>
             <td colspan="2" rowspan="5" style="width:300px;height: 100px;">
@@ -199,15 +205,17 @@
             <th colspan="2" scope="col">Total Weight</th>
             <th colspan="2" scope="col">Total Weight - Volume</th>
             <th colspan="2" scope="col">Total Volume</th>
-            </tr>
+          </tr>
           <tr>
             <td style="width:15%;">{{ $total_piezas }} Pcs</td>
             <td style="width:15%;">{{ $total_libras }} Lb</td>
-            <td style="width:15%;">{{ number_format(ceil($total_libras / 2.20462), 0) }} Kl</td>
-            <td style="width:15%;">{{ number_format(ceil((isset($total_volumen) ? ceil($total_volumen) : 0)),0) }} Lb</td>
-            <td style="width:15%;">{{ number_format(ceil(((isset($total_volumen) ? ceil($total_volumen) : 0) / 2.204622)), 0) }} Kl</td>
-            <td style="width:15%;">{{ $pie = number_format(ceil(($total_volumen * 166 / 1728)), 0) }} cuft</td>
-            <td style="width:10%;">{{ $metro = number_format(ceil(($pie / 35.315)), 0) }} cbm</td>
+            <td style="width:15%;">{{ number_format(($total_libras / 2.20462), 0) }} Kl</td>
+
+            <td style="width:15%;">{{ number_format(((isset($total_volumen) ? ($total_volumen) : 0)),2) }} Lb</td>
+            <td style="width:15%;">{{ number_format($total_volumenKl,2) }} Kl</td>
+
+            <td style="width:15%;">{{ $pie = number_format($total_volumen_cft, 2) }} cuft</td>
+            <td style="width:10%;">{{ $metro = number_format($total_volumen_cmb, 2) }} cbm</td>
           </tr>
         </table>
         <table border="1" class="table_grid separador_interno">
@@ -220,7 +228,7 @@
                 <th class="col" >Content</th>
                 <th class="col" style="width: 10%">Weight<br>Lb / Kg</th>
                 {{-- <th class="col" style="width: 7%">Weight<br>Kg</th> --}}
-                <th class="col" style="width: 10%">Vol<br>Lb / Kg</th>
+                <th class="col" style="width: 13%">Vol<br>Lb / Kg</th>
                 {{-- <th class="col" style="width: 7%">Vol<br>Kg</th> --}}
                 {{-- <th class="col" style="width: 7%">Weight<br>Ft3</th> --}}
                 <th class="col" style="width: 10%">Vol<br>ft³ / mt³</th>
@@ -234,13 +242,16 @@
                   </td class="detalle">
                   <td class="detalle">{{ $val->piezas }}</td>
                   <td class="detalle">{{ $val->largo . 'x'.$val->ancho. 'x'. $val->alto }}</td>
-                  <td style="text-align: left;" class="detalle">{{ strtoupper(str_replace(',', ' ',$val->contenido)) }} </td>
-                  <td class="detalle">{{ $val->peso2 }} / {{ number_format(ceil($val->peso2 / 2.205),0) }}</td>
+                  <td style="text-align: left;" class="detalle">
+                    {{ strtoupper(str_replace(',', ' ',$val->contenido)) }} <br>
+                    <strong>Trackings:</strong> {{ $val->trackings }}
+                  </td>
+                  <td class="detalle">{{ $val->peso }} / {{ number_format(($val->peso / 2.205),2) }}</td>
                   {{-- <td>{{ ceil(number_format($val->peso2 / 2.205)) }}</td> --}}
-                  <td class="detalle">{{ ceil($val->volumen) }} / {{ number_format(ceil($val->volumen / 2.204622),0) }}</td>
+                  <td class="detalle">{{ number_format($val->volumen,2) }} / {{ number_format(($val->volumen / 2.204622),2) }}</td>
                   {{-- <td>{{ ceil(number_format($val->volumen / 2.204622)) }}</td> --}}
                   {{-- <td>{{ ceil(number_format($val->volumen * 166 / 1728)) }}</td> --}}
-                  <td class="detalle">{{ ceil(number_format($val->volumen * 166 / 1728)) }} / {{ number_format(ceil(($val->volumen * 166 / 1728) / 35.315),0) }}</td>
+                  <td class="detalle">{{ calculateFt($val->volumen) }} / {{ number_format((($val->volumen * 166 / 1728) / 35.315),2) }}</td>
                 </tr>
               @endforeach
             </tbody>
@@ -260,7 +271,7 @@
                   <td>{{ $val->ancho }}</td>
                   <td>{{ $val->alto }}</td>
                   <td>{{ $val->piezas }}</td>
-                  <td>{{ $val->peso2 }}</td>
+                  <td>{{ $val->peso }}</td>
                   <td style="text-align:left;">{{ $val->contenido }}</td>
                 </tr>
               @endforeach
@@ -280,19 +291,20 @@
                             <table width="100%" border="0" cellspacing="1" cellpadding="0">
                                 <tr>
                                     <?php
-                                      if($documento->tipo_embarque_id == '8'){
-                                        if($pa_id == '1'){
-                                          $sub = $pie * $documento->valor_libra;
-                                        }else{
-                                          $sub = $metro * $documento->valor_libra;
-                                        }
-                                      }else{
-                                        if($total_libras > $total_volumen){
-                                          $sub = ($documento->flete);
-                                        }else{
-                                          $sub = ($documento->flete);
-                                        }
-                                      }
+                                         $sub = $documento->flete;
+                                      //if($documento->tipo_embarque_id == '8'){
+                                        //if($pa_id == '1'){
+                                          //$sub = $pie * $documento->valor_libra;
+                                        //}else{
+                                        //  $sub = $metro * $documento->valor_libra;
+                                        //}
+                                      //}else{
+                                        //if($total_libras > $total_volumen){
+                                          //$sub = ($documento->flete);
+                                        //}else{
+                                          //$sub = ($documento->flete);
+                                        //}
+                                      //}
                                     ?>
                                     <td><b>@lang('general.freight'):</b></td>
                                     <td align="right">$ {{ $subtotal = number_format(ceil($sub), 2) }} </td>
@@ -377,6 +389,7 @@
             @endif
           </table>
 
+          @if($showLeyend)
           <table class="acuerdo separador_interno">
              @if(env('APP_CLIENT') == 'worldcargo')
               <?php  $agencia = 'WORLD CARGO' ?>
@@ -405,6 +418,7 @@
               </td>
             </tr>
           </table>
+          @endif
 
         @endif
         <table class="table_firma separador_interno" style="{{ (env('APP_CLIENT') == 'worldcargo' || env('APP_CLIENT') == 'colombiana') ? 'padding-top:30px;' : '' }}">
@@ -427,3 +441,11 @@
         @endif
     </body>
 </html>
+
+@php
+    function calculateFt($vol){
+      $mod = fmod($vol * 166 / 1728, 1);
+      $roundVol = ($mod >= 0.5) ? number_format(ceil($vol * 166 / 1728),2) : round($vol * 166 / 1728,2);
+      return $roundVol;
+    }
+@endphp
