@@ -249,7 +249,7 @@ function datatableDetail(){
                     .column(8)
                     .data()
                     .reduce(function (a, b) {
-                        return intVal(Math.ceil(a)) + intVal(Math.ceil(b));
+                        return (parseFloat(a)) + (parseFloat(b));
                     }, 0);
             var piezas = api
                     .column(9)
@@ -261,21 +261,23 @@ function datatableDetail(){
                     .column(10)
                     .data()
                     .reduce(function (a, b) {
-                        return intVal(Math.ceil(a)) + intVal(Math.ceil(b));
+                        return (Math.ceil(a)) + (Math.ceil(b));
                     }, 0);
             var dec = api
                     .column(11)
                     .data()
                     .reduce(function (a, b) {
-                        return intVal(a) + intVal(b);
+                        return (a) + (b);
                     }, 0);
 
             /*Update footer formatCurrency()*/
-            $('#piezas').val(parseFloat(isInteger(piezas)));
-            $('#volumen').val(parseFloat(isInteger(Math.ceil(vol))));
-            $('#pie_ft').val(parseFloat(isInteger(Math.ceil(vol * 166 / 1728))));
-            $('#pesoDim').val(parseFloat(isInteger(peso)));
-            $('#valor_declarado_tbl').val(parseFloat(isInteger(dec)));
+            let pie = vol * 166 / 1728;
+            let pieC = Number(pie.toString().match(/^\d+(?:\.\d{0,2})?/));
+            $('#piezas').val(parseFloat((piezas)));
+            $('#volumen').val(parseFloat((vol).toFixed(2)));
+            $('#pie_ft').val(parseFloat(pieC));
+            $('#pesoDim').val(parseFloat((peso)));
+            $('#valor_declarado_tbl').val(parseFloat((dec)));
         },
     }).on('xhr.dt', function ( e, settings, json, xhr ) {
         if(app_type === 'courier'){

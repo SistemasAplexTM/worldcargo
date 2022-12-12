@@ -408,6 +408,8 @@ class DocumentoController extends Controller
                             ]);
                             $request->session()->flash('print_document', array('id' => $id, 'document' => ($request->option == 'print' || $request->option == 'all') ? 'guia' : ''));
                         }
+                        $data->peso         = $request->pesoDim;
+                        $data->peso_cobrado = $request->pesoDim;
                         $data->piezas            = $request->piezas;
                         $data->volumen           = $request->volumen;
                         $data->observaciones     = $request->observaciones;
